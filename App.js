@@ -43,26 +43,29 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#667eea" />
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.titulo}>✨ Minhas Tarefas ✨</Text>
-        <Text style={styles.subtitulo}>Organize seu dia com estilo</Text>
+        <Text style={styles.titulo}>Hoje</Text>
+        <Text style={styles.subtitulo}>28 Ago 2025</Text>
       </View>
 
-      {/* Input Section */}
+      {/* Search/Input Section */}
       <View style={styles.inputSection}>
         <TextInput
+          style={styles.searchInput}
+          placeholder="🔍 Pesquisar"
+          placeholderTextColor="#ffffff"
+        />
+        
+        <TextInput
           style={styles.input}
-          placeholder="✍️ Digite uma nova tarefa..."
-          placeholderTextColor="#a0a0a0"
+          placeholder="Digite uma nova tarefa..."
+          placeholderTextColor="#999"
           value={novaTarefa}
           onChangeText={setNovaTarefa}
         />
-        <TouchableOpacity style={styles.botaoAdicionar} onPress={adicionarTarefa}>
-          <Text style={styles.botaoAdicionarTexto}>+ Adicionar</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Lista de tarefas */}
@@ -74,24 +77,26 @@ export default function App() {
         renderItem={({ item, index }) => (
           <View style={styles.tarefaContainer}>
             <View style={styles.tarefaContent}>
-              <View style={styles.iconeTarefa}>
-                <Text style={styles.iconeTexto}>📝</Text>
-              </View>
               <Text style={styles.tarefaTexto}>{item}</Text>
+              <Text style={styles.horario}>9:00 am</Text>
             </View>
             <TouchableOpacity onPress={() => excluirTarefa(index)} style={styles.botaoExcluir}>
-              <Text style={styles.botaoExcluirTexto}>🗑️</Text>
+              <Text style={styles.botaoExcluirTexto}>×</Text>
             </TouchableOpacity>
           </View>
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTexto}>🎯</Text>
             <Text style={styles.emptyMensagem}>Nenhuma tarefa ainda!</Text>
             <Text style={styles.emptySubmensagem}>Adicione sua primeira tarefa acima</Text>
           </View>
         }
       />
+
+      {/* Botão Adicionar */}
+      <TouchableOpacity style={styles.botaoAdicionar} onPress={adicionarTarefa}>
+        <Text style={styles.botaoAdicionarTexto}>+ Adicionar nova tarefa</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -99,136 +104,133 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#f8f9fa',
   },
   header: {
-    backgroundColor: '#667eea',
-    paddingTop: 60,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    shadowColor: '#667eea',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 15,
+    backgroundColor: '#ffffff',
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 25,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    marginTop: 20,
+    marginHorizontal: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
   },
   titulo: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#ffffff',
-    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#333',
     marginBottom: 5,
   },
   subtitulo: {
-    fontSize: 16,
-    color: '#e2e8f0',
-    textAlign: 'center',
-    fontWeight: '300',
+    fontSize: 14,
+    color: '#999',
+    fontWeight: '400',
   },
   inputSection: {
+    paddingHorizontal: 25,
+    paddingVertical: 20,
+    backgroundColor: '#ffffff',
+    marginHorizontal: 20,
+  },
+  searchInput: {
+    backgroundColor: '#4285f4',
+    borderRadius: 25,
     paddingHorizontal: 20,
-    paddingVertical: 25,
+    paddingVertical: 15,
+    fontSize: 16,
+    color: '#ffffff',
+    marginBottom: 15,
   },
   input: {
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 18,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
     fontSize: 16,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    borderWidth: 2,
-    borderColor: '#e2e8f0',
-  },
-  botaoAdicionar: {
-    backgroundColor: '#4f46e5',
-    borderRadius: 20,
-    paddingVertical: 18,
-    alignItems: 'center',
-    shadowColor: '#4f46e5',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 8,
-  },
-  botaoAdicionarTexto: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '700',
+    borderWidth: 1,
+    borderColor: '#e9ecef',
   },
   listContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 25,
+    paddingTop: 10,
+    backgroundColor: '#ffffff',
+    marginHorizontal: 20,
+    borderRadius: 0,
   },
   tarefaContainer: {
     backgroundColor: '#ffffff',
-    borderRadius: 18,
-    padding: 20,
-    marginBottom: 15,
+    paddingVertical: 20,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f3f4',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 6,
-    borderLeftWidth: 4,
-    borderLeftColor: '#10b981',
   },
   tarefaContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
     flex: 1,
-  },
-  iconeTarefa: {
-    backgroundColor: '#f0fdf4',
-    borderRadius: 12,
-    padding: 8,
-    marginRight: 15,
-  },
-  iconeTexto: {
-    fontSize: 18,
   },
   tarefaTexto: {
     fontSize: 16,
-    color: '#1f2937',
+    color: '#333',
     fontWeight: '500',
-    flex: 1,
+    marginBottom: 5,
+  },
+  horario: {
+    fontSize: 13,
+    color: '#999',
   },
   botaoExcluir: {
-    backgroundColor: '#fee2e2',
-    borderRadius: 12,
-    padding: 10,
-    marginLeft: 10,
+    backgroundColor: '#ff4757',
+    borderRadius: 15,
+    width: 25,
+    height: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   botaoExcluirTexto: {
-    fontSize: 18,
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  botaoAdicionar: {
+    backgroundColor: '#4285f4',
+    marginHorizontal: 25,
+    marginVertical: 20,
+    borderRadius: 25,
+    paddingVertical: 18,
+    alignItems: 'center',
+    shadowColor: '#4285f4',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  botaoAdicionarTexto: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
-  },
-  emptyTexto: {
-    fontSize: 60,
-    marginBottom: 20,
+    paddingVertical: 40,
   },
   emptyMensagem: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#6b7280',
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#666',
     marginBottom: 8,
   },
   emptySubmensagem: {
     fontSize: 14,
-    color: '#9ca3af',
+    color: '#999',
     textAlign: 'center',
   },
 });
