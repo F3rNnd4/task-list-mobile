@@ -1,42 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, StatusBar } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, StatusBar, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [tarefas, setTarefas] = useState([]);
   const [novaTarefa, setNovaTarefa] = useState('');
 
-  // Carregar tarefas salvas ao iniciar o app
+  // Carregar tarefas quando o app abre
   useEffect(() => {
-    const carregarTarefas = async () => {
-      const tarefasSalvas = await AsyncStorage.getItem('tarefas');
-      if (tarefasSalvas) {
-        setTarefas(tarefasSalvas.split(',')); // Carregar como lista
-      }
-    };
     carregarTarefas();
   }, []);
 
-  // Salvar tarefas no AsyncStorage
-  const salvarTarefas = async (tarefasAtualizadas) => {
-    await AsyncStorage.setItem('tarefas', tarefasAtualizadas.join(',')); // Salvar como string separada por vírgulas
+  // Carregar tarefas salvas
+  const carregarTarefas = async () => {
+    const tarefasSalvas = await AsyncStorage.getItem('tarefas');
+    if (tarefasSalvas) {
+      setTarefas(tarefasSalvas.split(','));
+    }
   };
 
   // Adicionar nova tarefa
-  const adicionarTarefa = () => {
-    if (novaTarefa.trim() === '') return;
+  const adicionarTarefa = async () => {
+    if (novaTarefa.trim() === '') {
+      Alert.alert('Erro', 'Digite uma tarefa!');
+      return;
+    }
 
-    const tarefasAtualizadas = [...tarefas, novaTarefa];
-    setTarefas(tarefasAtualizadas);
-    salvarTarefas(tarefasAtualizadas);
+    const novaLista = [...tarefas, novaTarefa];
+    setTarefas(novaLista);
+    await AsyncStorage.setItem('tarefas', novaLista.join(','));
     setNovaTarefa('');
+    Alert.alert('Sucesso', 'Tarefa adicionada!');
   };
 
   // Excluir tarefa
-  const excluirTarefa = (index) => {
-    const tarefasAtualizadas = tarefas.filter((_, i) => i !== index);
-    setTarefas(tarefasAtualizadas);
-    salvarTarefas(tarefasAtualizadas);
+  const excluirTarefa = async (index) => {
+    const novaLista = tarefas.filter((_, i) => i !== index);
+    setTarefas(novaLista);
+    await AsyncStorage.setItem('tarefas', novaLista.join(','));
+    Alert.alert('Sucesso', 'Tarefa removida!');
   };
 
   return (
@@ -82,7 +84,6 @@ export default function App() {
             </TouchableOpacity>
           </View>
         )}
-        // Componente para quando a lista estiver vazia
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyTexto}>🎯</Text>
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
   },
   header: {
-    backgroundColor: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    backgroundColor: '#667eea',
     paddingTop: 60,
     paddingBottom: 30,
     paddingHorizontal: 20,
@@ -116,13 +117,13 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#191414',
+    color: '#ffffff',
     textAlign: 'center',
     marginBottom: 5,
   },
   subtitulo: {
     fontSize: 16,
-    color: '#374151',
+    color: '#e2e8f0',
     textAlign: 'center',
     fontWeight: '300',
   },
